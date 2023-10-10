@@ -1,0 +1,36 @@
+#include<iostream>
+using namespace std;
+
+int main()
+{
+	setlocale(LC_ALL, "RU");
+    int x;
+    cin >> x;
+
+    int a;
+    int b;
+    if (log10(x) == ceil(log10(x)))
+        a = log10(x) + 1;
+    else
+        a = ceil(log10(x));
+    b = a;
+
+
+
+    for (int i = 0; i < a; i++)
+    {
+        a = x % (int)pow(10, i + 1) / (int)pow(10, i);
+    }
+
+    for (int i = a; i > 0; i--)
+        b = x % (int)pow(10, i) / (int)pow(10, i - 1);
+    if (a == b && a > 0)
+    {
+        cout << "true";
+    }
+    
+    else
+        cout << "false";
+	
+	return 0;
+}
