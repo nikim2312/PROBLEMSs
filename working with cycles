@@ -1,0 +1,91 @@
+#include <iostream>
+
+#define N 30
+using namespace std;
+int main()
+{
+    //const int M = 10;
+
+    //int a[N]; //a[0] .. a[9] (a[N-1])
+    //int b[M];
+
+    //1. Сгенерировать массив из N случайных чисел (10..99) и вывести эти числа из массива через пробел.
+    srand(time(NULL));
+    int mas[N];
+
+    for (int i = 0; i < N; i++)
+    {
+        mas[i] = rand() % 90 + 10; //0..89 + 10 = 10..99
+    }
+    for (int i = 0; i < N; i++)
+    {
+        cout << mas[i] << " ";
+    }
+
+    //Найти и вывести максимум массива
+    int max = 0;
+    for (int i = 0; i < N; i++)
+    {
+        if (mas[i] > max)
+            max = mas[i];
+
+    }
+    cout << endl << max << endl << endl;
+
+    //Вывести все простые числа из массива
+    bool stop = true;
+    bool stop1 = true;
+    int numd = 0;
+    int a = 0;
+    double b = 1;
+    for (int i = 0; i < N; i++)
+    {
+        for (int w = i + 1; w < N; w++)
+        {
+            if (mas[i] > mas[w])//Если число в общем массиве больше, чем следующее, меняем их местами.
+            {
+                numd = mas[i];
+                mas[i] = mas[w];
+                mas[w] = numd;
+            }
+        }
+        stop = true;
+        stop1 = true;
+        for (int t = 2; t < mas[i]; t++)
+        {
+            if (mas[i] % t == 0)
+                stop = false;
+
+        }
+        if (stop == true)
+        {
+
+            for (int k = 0; k < i; k++)
+            {
+                if (mas[i] == mas[k]) // Сверяем текущий элемент массива с предыдущими, если есть повтор, не выводим его.
+                {
+                    stop1 = false;
+
+                }
+            }
+            if (stop1 == true)
+            {
+
+                cout << mas[i] << endl;
+            }
+
+        }
+        
+        a = mas[i] + a; 
+        b = b * mas[i];
+        
+    }
+    double bb = pow(b, (double)1 / N);
+
+    cout << " " << a / N;
+    cout << " - " << round(bb);
+    //1. Вывести все простые числа без повторов
+    //2. Вывести их без повторов в порядке возрастания
+    //3. Найти среднене арифметическое и среднее геометрическое массива, и вывести разницу между ними по модулю.
+}
+
