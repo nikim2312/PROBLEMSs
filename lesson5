@@ -1,0 +1,46 @@
+#include <iostream>
+#include<string>
+
+using namespace std;
+int main()
+{
+    //Шифр Цезаря. Пользователь вводит текст и число. Сдвинуть (циклически) по алфавиту этот текст.
+    //Может содержать большие и маленькие английские буквы. Остальные символы остаются как есть.
+
+    string text;
+    int N;
+
+    cin >> text;
+    cin >> N;
+    int counter = 0;
+
+    //cout << (char)('a' + 2);
+    for (int i = 0; i < text.length(); i++)
+    {
+        if (text[i] >= 65 && text[i] <= 90)
+        {
+            text[i] = (char)(text[i] + N % 23);
+            //cout << (char)(text[i] + N);
+        }
+        else if (text[i] >= 97 && text[i] <= 122)
+        {
+            text[i] = (char)(text[i] + N % 23);
+            //cout << (char)(text[i] + N);
+        }
+        
+    
+           
+    }
+    cout << text;
+
+
+
+
+
+    //1. Написать код, который убирает лишние пробелы из текста.
+    //   Hello,     world!     \n
+    //Hello, world!
+    //2. Перевести буквы из младшего регистра в старший
+    //3. Посчитать количество слов в тексте и вывести список слов без повторов.
+}
+
