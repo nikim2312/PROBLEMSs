@@ -1,0 +1,123 @@
+#include<iostream>
+#include<string>
+#include<cstring>
+
+using namespace std;
+
+int main()
+{
+    string text = "   Hello,     mail mail   world!     ";
+    //cin >> text;
+
+    //for (int i = 0; i < text.length(); i++) //2
+    {
+        //if (text[i] >= 97 && text[i] <= 122)
+        {
+            //text[i] = char(text[i] - 32);
+        }
+    }
+    //cout << text;
+
+    bool  stop = true;
+
+    string text_1 = "";
+    for (int i = 0; i < text.length(); i++)//1
+    {
+
+        while (text[i] == 32 && stop == true)
+        {
+            i++;
+        }
+
+        stop = false;
+        text_1 += text[i];
+
+    }
+
+    text = text_1;
+    bool a = true;
+
+    int N = 0;
+    for (int i = text.length() - 1; i > -1; i--)
+    {
+        while (text[i] == 32 && a == true)
+        {
+            i--;
+            N++;
+        }
+        a = false;
+    }
+
+
+    string text2 = "";
+    for (int i = 0; i < text.length() - N; i++)
+    {
+        text2 += text[i];
+    }
+
+    text = text2;
+
+    cout << endl << text << "|";
+    bool b = true;
+    string text3 = "";
+
+
+    for (int i = 0; i < text.length(); i++)
+    {
+        if ((text[i] != 32) || (text[i - 1] != 32 && text[i] == 32))//1
+
+        {
+            text3 += text[i];
+        }
+    }
+    text = text3;
+
+    
+    string text4 = "";
+    for (int i = 0; i < text.length(); i++)//2
+    {
+        if (text[i] >= 97 && text[i] <= 122)
+        {
+            text4 += char(text[i] - 32);
+        }
+        else
+        {
+            text4 += text[i];
+        }
+
+    }
+    string listwords = "";
+    int counter = 0;//3
+    
+    for (int i = 0; i < text.length(); i++)
+    {
+        if (text[i] >= 65 && text[i] <= 90 || text[i] >= 97 && text[i] <= 122)
+        {
+            listwords += text[i];
+            
+
+        }
+        if (text[i] == 32)
+        {
+            listwords += ", ";
+            counter++;
+        }
+    }
+    string mas[counter]
+    
+
+
+    cout << endl << text;
+    cout << endl << text4;
+    cout << endl << counter + 1;
+    cout << endl << listwords;
+    
+}
+
+
+
+//1. Написать код, который убирает лишние пробелы из текста.
+//   Hello,     world!     \n
+//Hello, world!
+//2. Перевести буквы из младшего регистра в старший.
+//3. Посчитать количество слов в тексте и вывести список слов без повторов.
