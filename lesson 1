@@ -1,0 +1,43 @@
+// lesson1.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
+//
+
+#include <iostream>
+using namespace std;
+
+
+int main()
+{
+    setlocale(LC_ALL, "RU");
+    //Пользователь вводит число N. Вывести цифры этого числа в столбик.
+    //5136
+    //6
+    //3
+    //1
+    //5
+    int n;
+    int a;
+    int b;
+    cout << "Введите число: ";
+    cin >> n;
+
+    if (log10(n) == ceil(log10(n)))
+        a = log10(n) + 1;
+    else
+        a = ceil(log10(n));
+
+    
+
+    for (int i = 0; i < a; i++)
+    {
+        cout << n % (int)pow(10, i + 1) / (int)pow(10, i) << endl;
+    }
+
+    //Вывести эти же цифры, только с начала по конец.
+}
+
+
+    /* cout << n % 10 / 1 << endl;
+     cout << n % 100 / 10 << endl;
+     cout << n % 1000 / 100  << endl;
+     cout << n % 10000 / 1000 << endl;*/
+    
