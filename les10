@@ -1,0 +1,112 @@
+#include<iostream>
+#include <string>
+#include<fstream>
+
+using namespace std;
+
+//Прочитать html-файл, имя которого задано в переменной. Вывести на экран список названий блюд, содержащихся в этом файле.
+
+
+int main()
+{
+	setlocale(0, "Russian");
+	string filename = "input.html";
+
+	ifstream is(filename);
+
+	if (!is.is_open())
+	{
+		cout << "Error of opening file for reading!";
+		return -1;
+	}
+	int count = 0;
+	string b;
+	
+	while (!is.eof())
+	{
+		
+		
+
+		//is >> b; //СЧИТЫВАЕТ ДО ПРОБЕЛА ИЛИ ПЕРЕНОСА
+		
+		getline(is, b); //СЧИТЫВАЕТ ПОСТРОЧНО
+		count++;
+		
+		
+	}
+	
+	is.close();
+	
+	is.open(filename);
+
+	if (!is.is_open())
+	{
+		cout << "Error of opening file for reading!";
+		return -1;
+	}
+	string* mas = new string[count];
+	int i = 0;
+	while (!is.eof())
+	{
+		getline(is, mas[i]);
+		i++;
+	}
+
+	/*for (int i = 0; i < count; i++)
+	{
+		cout << mas[i] << "\n";
+	}*/
+
+	is.close();
+
+	is.open(filename);
+	if (!is.is_open())
+	{
+		cout << "Error of opening file for reading!";
+		return -1;
+	}
+	
+	i = 0;
+	string sub = "span itemprop=";
+	string sube = "</span></a>";
+	for (int i = 0; i < count; i++)
+	{
+		string name = "";
+		size_t found = mas[i].find(sub);
+		if (found != string::npos)
+		{
+			size_t fon = mas[i].find(sube);
+			int f = found + 21;
+			name += mas[i];
+			int sim = 0;
+			for (int j = f; j < fon; j++)
+			{
+				if (name[j] >= 33 && name[j] <= 47)
+				{
+					sim++;
+				}
+			}
+			for (int j = f; j < fon + sim; j++)
+			{
+				
+				if (name[j] >= 33 && name[j] <= 47)/* &&
+					(name[j] <= '0' || name[j] >= '9') && (name[j] <= 65 || name[j] >= 90) && (name[j] <= 97 || name[j] >= 122)*/
+					continue;
+				else		
+				cout << name[j];
+			}
+			i++;
+			cout << endl;
+		}
+		else
+		{
+			i++;
+		}
+	}
+	
+	
+	is.close();
+	delete[] mas;
+}
+
+//2. Посчитать и вывести сколько ТЕГОВ встречается в документе.
