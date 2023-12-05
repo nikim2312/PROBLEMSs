@@ -1,0 +1,134 @@
+#include<iostream>
+using namespace std;
+#include<string>
+#include<algorithm>
+
+#define N 10
+#define M 10
+#define P 13
+
+
+int main()
+{
+    srand(time(NULL));
+    
+
+    int** matrix;// создаем двумерные динамические массивы
+
+    matrix = new int* [N];
+    for (int i = 0; i < N; i++)
+        matrix[i] = new int[M];
+    string** matr;
+    matr = new string* [N];
+    for (int i = 0; i < N; i++)
+    {
+        matr[i] = new string[M];
+    }
+    //-------
+    for (int i = 0; i < N; i++)//рандомно заполняем числовой.
+    {
+        for (int j = 0; j < M; j++)
+        {
+            matrix[i][j] = rand() % 90 + 10;
+        }
+    }
+    for (int i = 0; i < N; i++)//выводим его элеметы в вииде матрицы.
+    {
+        for (int j = 0; j < M; j++)
+        {
+            cout << matrix[i][j] << " ";
+
+
+        }
+        cout << endl;
+    }
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < M; j++)
+        {
+
+            int counter = - 1;
+            string el = "";
+            
+            while (matrix[i][j] > 0)//переводим его в нужную систему счисления, добавляя по символу к строке.
+            {
+                counter++;
+                if (matrix[i][j] % P == 10)
+                {
+                    el += "A";
+                }
+                else if (matrix[i][j] % P == 11)
+                {
+                    el += "B";
+
+                }
+                else if (matrix[i][j] % P == 12)
+                {
+                    el += "C";
+                }
+                else if (matrix[i][j] % P == 13)
+                {
+                    el += "D";
+                }
+                else if (matrix[i][j] % P == 14)
+                {
+                    el += "E";
+                }
+                else if (matrix[i][j] % P == 15)
+                {
+                    el += "F";
+                }
+                else
+                {
+                    el += to_string(matrix[i][j] % P);//переводим числовые значения в текст для заполнения теккстовой матрицы.
+                }
+
+                matrix[i][j] /= P;
+
+            }
+            
+            
+
+
+           
+            reverse(el.begin(), el.end());// переворачиваем строку для корректного перевода
+
+            matr[i][j] = el;// присваиваем перевернутое значение текствому двумерному массиву.
+
+                
+
+
+
+
+
+
+        }
+    }
+
+    //el += to_string(a / 2);
+
+    //
+
+   
+    cout << endl << endl;
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < M; j++)
+        {
+            cout << matr[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+
+    for (int i = 0; i < N; i++)
+        delete[] matrix[i];
+    delete[] matrix;
+    for (int i = 0; i < N; i++)
+        delete[] matr[i];
+    delete[] matr;
+}
+
+//Сгенерировать и вывести матрицу из случайных чисел 10..99
+//Перевести каждое число в P-ичную систему счисления, где P E [2..16]
+//И вывести в виде матрицы
