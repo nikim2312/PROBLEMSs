@@ -1,0 +1,128 @@
+#include<iostream>
+#include<fstream>
+
+using namespace std;
+
+int main()
+{
+	//Пользователь вводит два числа N и M. Сгенерировать матрицу NxM из чисел 10..99. Вывести ее в файл.
+	srand(time(NULL));
+
+	int N;
+	int M;
+	cin >> N;
+	cin >> M;
+	int** arr;
+	arr = new int* [N];
+	for (int i = 0; i < N; i++)
+	{
+		arr[i] = new int[M];
+	}
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < M; j++)
+		{
+			arr[i][j] = rand() % 90 + 10;
+		}
+	}
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < M; j++)
+		{
+			cout << arr[i][j] << " ";
+		}
+		cout << endl;
+	}
+	ofstream os("C:/Users/user/source/repos/les9/test3.txt");
+
+	if (!os.is_open())
+	{
+		cout << "Error of opening file for writing!";
+		return -1;
+	}
+	
+	int counter = 0;
+	for (int f = 0; f < M; f++)
+	{
+		for (int y = 0; y < N; y++)
+		{
+			
+				int pos = 0;
+				int min = arr[f][y];// берем за минимум всеэлементы по порядку.
+				for (int j = counter; j < M; j++)// каждый раз сравниваем меньшее количество чисел
+				{
+
+					if (arr[f][j] < min)
+					{
+						pos = j;//находим индекс минимального числа
+						min = arr[f][j];// находим минимальное число
+
+					}
+				}
+				if (pos > counter)//если мин справа от взятого числа, то меняем их местами
+				{
+					int x = arr[f][counter];
+					arr[f][counter] = arr[f][pos];
+					arr[f][pos] = x;
+				}
+				else
+					arr[f][y] = min;// одинаково - текущее число минимальное.
+
+				counter++;
+			
+
+
+		}
+		counter = 0;
+	}
+	for (int i = 0; i < M; i++)
+	{
+		for (int j = 0; j < N; j++)
+		{
+			os << arr[i][j] << " ";
+		}
+		os << endl;
+	}
+	os.close();
+	for (int i = 0; i < N; i++)
+	{
+		delete[] arr[i];
+	}
+	delete[] arr;
+}
+
+int Test() {
+	int a = 10;
+	int b = 0;
+
+	ofstream os("test2.txt");
+
+	if (!os.is_open())
+	{
+		cout << "Error of opening file for writing!";
+		return -1;
+	}
+
+	os << a << endl; //Потоковый вывод в файл
+
+	os.close();
+
+
+	ifstream is("C:/Users/user/source/repos/les9/test.txt");
+
+	if (!is.is_open())
+	{
+		cout << "Error of opening file for reading!";
+		return -1;
+	}
+
+	while (!is.eof())
+	{
+		is >> b;
+		cout << b << " ";
+	}
+
+
+
+	is.close();
+}
