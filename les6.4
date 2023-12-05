@@ -1,0 +1,89 @@
+#include<iostream>
+using namespace std;
+
+int main()
+{
+    srand(time(NULL));
+    int a = rand() % 5 + 3;
+    int b = rand() % 5 + 3;
+
+    int* mas = new int[a];
+    int* mas1 = new int[b];
+
+    for (int i = 0; i < a; i++)
+    {
+        mas[i] = rand() % 9 + 1;
+        cout << mas[i] << " ";
+
+    }
+
+    for (int i = 0; i < a; i++)// bubble sort
+    {
+        for (int j = 0; j < a - 1; j++)
+        {
+            if (mas[j] > mas[j + 1])
+            {
+                int tmp = mas[j];
+                mas[j] = mas[j + 1];
+                mas[j + 1] = tmp;
+            }
+        }
+    }
+    cout << endl;
+    for (int i = 0; i < a; i++)
+    {
+        cout << mas[i] << " ";
+    }
+    cout << endl << endl;
+    for (int i = 0; i < b; i++)
+    {
+        mas1[i] = rand() % 9 + 1;
+        cout << mas1[i] << " ";
+    }
+    cout << endl;
+    for (int i = 0; i < b; i++)
+    {
+        for (int j = 0; j < b - 1; j++)// bubble sort
+        {
+            if (mas1[j] > mas1[j + 1])
+            {
+                int tmp = mas1[j];
+                mas1[j] = mas1[j + 1];
+                mas1[j + 1] = tmp;
+            }
+        }
+    }
+
+    for (int i = 0; i < b; i++)
+    {
+
+        cout << mas1[i] << " ";
+    }
+    int* sort = new int[a + b];
+    for (int i = 0, i1 = 0, i2 = 0; i < a + b;)// merge sort
+    {
+        if (i1 == a)
+            sort[i++] = mas1[i2++];
+        else if (i2 == b)
+            sort[i++] = mas[i1++];
+        else if (mas[i1] < mas1[i2]) 
+            sort[i++] = mas[i1++];
+        else
+            sort[i++] = mas1[i2++];
+    }
+    cout << endl;
+    for (int i = 0; i < (a + b); i++)
+    {
+        cout << sort[i] << " ";
+    }
+
+
+
+    delete[] mas;
+    delete[] mas1;
+    delete[] sort;
+}
+//4. Сгенировать два случайных массива размерами 3..7 элементов (размер каждого также определяется случайно)
+ //Добавить числа из двух массивов в третий так,
+ //  чтобы итоговый массив оказался сортированным
+ //  (сортировку не делать ПОСЛЕ формирования массива, он должен быть УЖЕ отсортирован, когда наполнится)
