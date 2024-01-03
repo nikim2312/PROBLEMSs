@@ -1,0 +1,161 @@
+
+#include <iostream>
+#include <cmath>
+using namespace std;
+int** Gen(int N, int M)
+{
+    int** arr;
+    arr = new int* [N];
+    for (int i = 0; i < N; i++)
+    {
+        arr[i] = new int[M];
+    }
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < M; j++)
+        {
+            arr[i][j] = rand() % 90 + 10;
+        }
+    }
+    return arr;
+}
+void cout_1(int** arr, int N, int M)
+{
+    for (int i = 0;  i < N; i++)
+    {
+        for (int j = 0; j < M; j++)
+        {
+            cout << arr[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+int** new_matr(int** res, int& N, int& M)
+{
+    int h = 0;
+    int g = 0;
+    int N1 = N;
+    int M1 = M;
+    int count = 0;
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < M; j++)
+        {
+            bool stop = true;
+            for (int y = 2; y < res[i][j]; y++)
+            {
+                if (res[i][j] % y == 0)
+                {
+                    stop = false;
+                }
+            }
+            if (stop == true)
+            {
+                count++;
+            }
+        }
+    }
+    int q = sqrt(count);
+   
+    if (count == 0)
+    {
+        N = 0;
+        M = 0;
+        return nullptr;
+        
+    }
+    if (count % q == 0)
+    {
+        N = q;
+        M = count / q;
+    }
+    else if (count % q != 0)
+    {
+        while (count % q != 0)
+        {
+            q -= 1;
+        }
+        N = q;
+        M = count / q;
+    }
+    int** res_n;
+    res_n = new int* [N];
+    for (int i = 0; i < N; i++)
+    {
+        res_n[i] = new int[M];
+    }
+    for (int i = 0; i < N1; i++)
+    {
+        for (int j = 0; j < M1; j++)
+        {
+            bool stop = true;
+            for (int y = 2; y < res[i][j]; y++)
+            {
+                if (res[i][j] % y == 0)
+                {
+                    stop = false;
+                }
+            }
+            if (stop == true)
+            {
+                
+                    res_n[h][g] = res[i][j];
+                    g++;
+                    if (g == M)
+                    {
+                        h++;
+                        g = 0;
+                    }
+                
+            }
+            
+        }
+        
+    }
+
+    return res_n;
+}
+int main()
+{
+    srand(time(NULL));
+    int N, M;
+    cin >> N;
+    cin >> M;
+    int** res;
+    res = new int* [N];
+    for (int i = 0; i < N; i++)
+    {
+        res[i] = new int[M];
+    }
+    res = Gen(N, M);
+    cout_1(res, N, M);
+    int** res_n;
+    res_n = new int* [N];
+    for (int i = 0; i < N; i++)
+    {
+        res_n[i] = new int[M];
+    }
+    res_n = new_matr(res, N, M);
+    cout_1(res_n, N, M);
+    for (int i = 0; i < N; i++)
+        delete[] res[i];
+    delete[] res;
+    for (int i = 0; i < N; i++)
+        delete[] res_n[i];
+    delete[] res_n;
+    /*for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < M; j++)
+        {
+            cout << res_n << " ";
+        }
+        cout << endl;
+    }*/
+}
+
+//1. Функция генерирующая и наполняющая матрицу NxM, размеры задаются пользователем в main
+//2. Вывести ее
+//3. Выбрать из матрицы все простые числа и составить из них новую матрицу, максимально квадратного размера (прямоугольного)
+//16 - 4x4
+//12 - 3x4 (2x6, 1x12)
+//17 - 1x17
