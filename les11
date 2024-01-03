@@ -1,0 +1,304 @@
+#include<string>
+#include <iostream>
+using namespace std;
+
+#pragma region Примеры функций
+//void Arr(int*& a, int count)  //по-умолчанию параметры в C++ передаются ПО ЗНАЧЕНИЮ (то есть КОПИИ значений, лежащих в этих переменных)
+//{
+//
+//    for (int i = 0; i < count; i++)
+//        a[i] = rand() % 10;
+//    // count = -100;
+//}
+//
+////& перед переменной в параметрах функции нужен, если тебе нужно поменять внутри функции САМУ перменную, непосредственно
+//
+//int Sum(int a, int b, int c = 1, string e = "")
+//{
+//    return a + c * b;
+//}
+//
+//string Sum(string a, string b)
+//{
+//    return a + b;
+//}
+//
+//void Print(int a, int b, ...) {
+//
+//    //   return; //return ВСЕГДА немедленно завершает функцию, в которой он написан
+//    cout << a - b;
+//
+//
+//}
+
+#pragma endregion
+void first(int& a, int*& mas)
+{
+    cin >> a;
+    mas = new int[a];
+    for (int i = 0; i < a; i++)
+    {
+        mas[i] = rand() % 10;
+    } 
+}
+void first_emp(int a, int*& mas)
+{
+    
+    mas = new int[a];
+    for (int i = 0; i < a; i++)
+    {
+        mas[i] = rand() % 10;
+    }
+}
+int Sec(int a, int* mas)
+{
+    int max = abs(mas[0] - mas[1]);
+    for (int i = 1; i < a - 1; i++)
+    {
+        if (abs(mas[i] - mas[i + 1]) > max)
+        {
+            max = abs(mas[i] - mas[i + 1]);
+        }
+    }
+    return max;
+}
+void Third(int a, int* mas)
+{
+    for (int i = 0; i < a; i++)
+    {
+        cout << mas[i] << " ";
+    }
+}
+void Third_emp(int a, int* mas)
+{
+    for (int i = 0; i < a - 1; i++)
+    {
+        cout << mas[i] << " ";
+    }
+}
+int* Forth(int a, int* mas1, int* mas2, int& size)
+{
+    int* result = new int[a*2];  // Динамический массив для результата
+    int counter = 0;
+    for (int i = 0; i < a; ++i) {
+        bool found = false;
+
+        for (int j = 0; j < a; ++j) {
+            if (mas1[i] == mas2[j]) {
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            result[counter++] = mas1[i];
+        }
+    }
+
+    // Добавление уникальных элементов из второго массива
+    for (int i = 0; i < a; ++i) {
+        bool found = false;
+
+        for (int j = 0; j < a; ++j) {
+            if (mas2[i] == mas1[j]) {
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            result[counter++] = mas2[i];
+        }
+    }
+
+    size = counter;  // Размер результата
+
+    return result;
+}
+int* Add(int a, int* mas, int d, int c)
+{
+    int* tmp = new int[a + 1];
+    for (int i = 0; i < d; i++)
+    {
+        tmp[i] = mas[i];
+    }
+    tmp[d] = c;
+    for (int i = d + 1; i < a + 1; i++)
+    {
+        tmp[i] = mas[i];
+    }
+   // mas = a + 1;
+   // mas = tmp;
+  //  delete[] tmp;
+    return tmp;
+}
+int* Delete(int a, int* mas, int d)
+{
+    int* tmp = new int[a - 1];
+    for (int i = 0; i < d; i++)
+    {
+        tmp[i] = mas[i];
+    }
+    
+    for (int i = d; i < a - 1; i++)
+    {
+        tmp[i] = mas[i + 1];
+    }
+    // mas = a + 1;
+    // mas = tmp;
+   // delete[] tmp;
+    
+    return tmp;
+    
+}
+int* merge(int a, int* mas, int* mas1, int case_choise)
+{
+    int* mas_res = new int[a * 2];
+    switch (case_choise)
+    {
+    case 0:
+        for (int i = 0; i < a; i++)
+        {
+            mas_res[i] = mas[i];
+        }
+        for (int i = a; i < a * 2; i++)
+        {
+            mas_res[i] = mas1[i - a];
+        }
+        for (int i = 0; i < a * 2; i++)
+        {
+            for (int j = 0; j < (a * 2) - 1; j++)
+            {
+                if (mas_res[j] > mas_res[j + 1])
+                {
+                    int tmp = mas_res[j];
+                    mas_res[j] = mas_res[j + 1];
+                    mas_res[j + 1] = tmp;
+                }
+            }
+        }
+        break;
+    case 1:
+        for (int i = 0; i < a; i++)
+        {
+            mas_res[i] = mas[i];
+        }
+        for (int i = a; i < a*2; i++)
+        {
+            mas_res[i] = mas1[i - a];
+        }
+        break;
+    case 2:
+        for (int i = 0; i < a; i++)
+        {
+            mas_res[i] = mas1[i];
+        }
+        for (int i = a; i < a*2; i++)
+        {
+            mas_res[i] = mas[i - a];
+        }
+        break;
+    }
+    return mas_res;
+    
+}
+int main()
+{
+    srand(time(NULL));
+    //Написать 3 функции: одна запрашивает у пользователя число, генерирует массив из стольких случайных чисел
+    //вторая функция находит максимальную разность между соседними числами и возвращает ее в main, где эта разность выводится
+    //третья функция выводит на экран массив
+    //четвертая функция приниает два массива и возвращает третий, в котором только числа, которые уникальны для обоих массивов
+    //(встречаются в первом, но не во втором и те, котороые встречаются во втором, но не встречаются в первом)
+
+    //Add
+    //Delete
+    //Слияние двух массивов в один так, чтобы в рамках одной функции с помощью параметра мы могли указать режим слияния:
+    //0 - с сортировкой
+    //1 - первый массив затем второй
+    //2 - второй массив затем первый
+
+    int* mas = nullptr;
+    int a = 0;
+    first(a, mas);
+    Third(a, mas);
+    cout << endl;
+    //cout << endl << Sec(a, mas) << endl;
+    /*Third(a, mas);
+    cout << endl;
+    int size = 0;
+    int* mas1 = nullptr;
+    int b = 0;
+    first_emp(5, mas1);
+    Third(5, mas1);
+   
+    cout << endl;
+    int* mas2 = nullptr;
+    first_emp(5, mas2);
+    Third(5, mas2);
+    
+    int* result = Forth(a, mas1, mas2, size);
+    cout << endl;
+    Third(size, result);*/
+
+
+    //-------------------
+   
+    //mas = Add(a, mas, 4, -10); // Функция добавляет число - 10 в массив на позицию 4
+    //
+    //Third(a, mas);
+    mas = Delete(a, mas, 7);
+    Third_emp(a, mas);
+    //-------------------
+    /*int* mas1 = new int[a];
+    for (int i = 0; i < a; i++)
+    {
+        mas1[i] = rand() % 10;
+    }
+    for (int i = 0; i < a; i++)
+    {
+        cout << mas1[i] << " ";
+    }
+    cout << endl;
+    int* result = merge(a, mas, mas1, 0);
+    for (int i = 0; i < a * 2; i++)
+    {
+        cout << result[i] << " ";
+    }*/
+   //delete[] result;
+    delete[] mas;
+    //delete[] mas1;
+    //delete[] mas1;
+   // delete[] mas2;
+#pragma region Объяснения темы
+
+
+    //int* ar = nullptr; //nullptr (null pointer) - пустой указатель, указатель в никуда
+    //int N = 10;
+    //ar = new int[N];
+
+    //Arr(ar, N);
+
+    //for (int i = 0; i < N; i++)
+    //    cout << ar[i] << "   ";
+    //cout << endl;
+
+
+    //int a = 10;
+    //int b = 15;
+
+    //cout << Sum(a, b, -1); //25
+
+    //int c = Sum(1, 2);
+
+
+    //cout << Sum("abd", "eee");
+
+    //Print(1, 2, 3, 4, 5);
+
+    //return 0;
+    
+#pragma endregion
+    
+}
+
