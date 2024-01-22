@@ -1,0 +1,402 @@
+#include <iostream> 
+#include<string>
+#include<fstream>
+using namespace std;
+#define N 20 
+#define M 40 
+
+#define Bombs 10
+
+
+int** mas()
+{
+
+    int** arr;
+    arr = new int* [N];
+    for (int i = 0; i < N; i++)
+    {
+        arr[i] = new int[M];
+    }
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < M; j++)
+        {
+            arr[i][j] = 0;
+        }
+    }
+
+    for (int i = 0; i < Bombs; i++)
+    {
+        int x, y;
+
+        do {
+            x = rand() % N;
+            y = rand() % M;
+        } while (arr[x][y] == -1);
+
+        arr[x][y] = -1;
+
+
+    }
+    int counter = 0;
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < M; j++)
+        {
+            counter = 0;
+            if (arr[i][j] == 0) {
+                if (i > 0 && j > 0 && arr[i - 1][j - 1] == -1)
+                {
+                    counter++;
+                }
+                if (i > 0 && arr[i - 1][j] == -1)
+                {
+                    counter++;
+                }
+                if (i > 0 && j < M - 1 && arr[i - 1][j + 1] == -1)
+                {
+                    counter++;
+                }
+                if (j > 0 && arr[i][j - 1] == -1)
+                {
+                    counter++;
+                }
+                if (j < M - 1 && arr[i][j + 1] == -1)
+                {
+                    counter++;
+                }
+                if (i < N - 1 && j > 0 && arr[i + 1][j - 1] == -1)
+                {
+                    counter++;
+                }
+                if (i < N - 1 && arr[i + 1][j] == -1)
+                {
+                    counter++;
+                }
+                if (i < N - 1 && j < M - 1 && arr[i + 1][j + 1] == -1)
+                {
+                    counter++;
+                }
+                arr[i][j] = counter;
+            }
+
+
+        }
+    }
+
+    return arr;
+}
+bool** mas1(int b = 0)
+{
+
+    bool** arr;
+    arr = new bool* [N];
+    for (int i = 0; i < N; i++)
+    {
+        arr[i] = new bool[M];
+    }
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < M; j++)
+        {
+            arr[i][j] = false;
+        }
+    }
+    return arr;
+}
+void print(int** arr, bool** matr)
+{
+    for (int i = 0; i < M + 2; i++)
+        cout << '#';
+    cout << endl;
+    for (int i = 0; i < N; i++)
+    {
+        cout << '#';
+        for (int j = 0; j < M; j++)
+        {
+            if (matr[i][j] == true)
+            {
+
+
+                if (arr[i][j] == -1)
+                    cout << '*';
+
+                else
+                    cout << arr[i][j];
+            }
+            else
+                cout << " ";
+        }
+        cout << '#';
+        cout << endl;
+
+    }
+    for (int i = 0; i < M + 2; i++)
+        cout << '#';
+    cout << endl << endl;
+}
+void print1(int** arr, bool** matr, int row, int col)
+{
+    for (int i = 0; i < M + 2; i++)
+        cout << '#';
+    cout << endl;
+    for (int i = 0; i < N; i++)
+    {
+        cout << '#';
+        for (int j = 0; j < M; j++)
+        {
+            if (matr[i][j] == true)
+            {
+
+                if (arr[row - 1][col - 1] == -1 &&  i == row - 1 && j == col - 1)
+                    cout << "X";
+                else if (arr[i][j] == -1)
+                    cout << '*';
+
+                else
+                    cout << arr[i][j];
+            }
+            else
+                cout << " ";
+        }
+        cout << '#';
+        cout << endl;
+
+    }
+    for (int i = 0; i < M + 2; i++)
+        cout << '#';
+}
+void endgame(int** arr, int row, int col, bool** matr)
+{
+    if (arr[row - 1][col - 1] == -1)
+    {
+        system("cls");
+        cout << "game over";
+        cout << endl;
+        for (int i = 0; i < N; i++)
+        {
+            for (int j = 0; j < M; j++)
+            {
+                matr[i][j] = true;
+            }
+        }
+        
+        print1(arr, matr, row, col);
+
+        //Вывести все открытое поле, но клетку, где мы взорвались, заменить на X
+    }
+
+  
+    
+   
+}
+void opening(int**& arr, int row, int col, bool**& matr) {
+    
+    if (matr[row][col] == false)
+    {
+        matr[row][col] = true;
+
+        if (arr[row][col] == 0)
+        {
+            if (row != 0)
+            {
+                opening(arr, row - 1, col, matr);
+            }
+            if (col != M - 1)
+            {
+                opening(arr, row, col + 1, matr);
+            }
+            if (col != 0)
+            {
+                opening(arr, row, col - 1, matr);
+            }
+            if (row != N - 1) {
+                opening(arr, row + 1, col, matr);
+            }
+        }
+    }
+}
+void win(bool** matr)
+{
+    int counter = 0;
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < M; j++)
+        {
+            if (matr[i][j] == false)
+            {
+                counter++;
+            }
+        }
+    }
+    if (counter == Bombs)
+    {
+        
+        cout << "win";
+    }
+}
+void saving(int** arr, bool** matr)
+{
+    ofstream saper("C:/Users/user/source/repos/saper/saper.txt");
+    if (!saper.is_open())
+    {
+        cout << "Error of opening file for writing!";
+        return;
+    }
+    
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < M; j++)
+        {
+            saper << arr[i][j];
+            saper << " ";
+
+        }
+        saper << endl;
+    }
+    saper << endl << endl;
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < M; j++)
+        {
+            if (matr[i][j] == false)
+            {
+                saper << "0";
+                saper << " ";
+            }
+            else if (matr[i][j] == true)
+            {
+                saper <<"1";
+                saper << " ";
+            }
+        }
+        saper << endl;
+    }
+    saper.close();
+    
+}
+void loading(int**& arr, bool**& matr) {
+    ifstream sapload("C:/Users/user/source/repos/saper/saper.txt");
+    if (!sapload.is_open()) {
+        cout << "Error of opening file for reading!";
+        return;
+    }
+    while (!sapload.eof())
+    {
+        for (int i = 0; i < N; i++) 
+        {
+            for (int j = 0; j < M; j++) 
+            {
+                
+                sapload >> arr[i][j];
+
+                
+            }
+
+        }
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                sapload >> matr[i][j];
+               /* int ch;
+                sapload >> ch;
+                if (ch == '0')
+                    matr[i][j] = false;
+                else if(ch == '1') {
+                    matr[i][j] = true;
+
+                }*/
+            }
+
+        }
+    }
+    sapload.close();
+
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < M; j++) {
+            cout << matr[i][j];
+
+        }
+        cout << endl;
+    }
+}
+
+void game(bool** matr, int** arr)
+{
+    while (true)
+    {
+        int col;
+        int row;
+        string turn;
+        //int col;
+        
+        cin >> turn;
+        if (turn == "save")
+        {
+            system("cls");
+            saving(arr, matr);
+            print(arr, matr);
+            cout << "Успешно сохранено!" << endl << endl;
+        }
+        else if (turn == "load")
+        {
+            system("cls");
+            loading(arr, matr);
+            print(arr, matr);
+            cout << "Успешно загружено!" << endl << endl;
+        }
+        else
+        {
+            
+            row = stoi(turn);
+            cin >> col;
+        
+            system("cls");
+            opening(arr, row - 1, col - 1, matr);
+
+            print(arr, matr);
+            endgame(arr, row, col, matr);
+            win(matr);
+        }
+        
+       
+        
+        
+        
+    }
+
+}
+
+int main()
+{
+    setlocale(LC_ALL, "RU");
+    srand(time(NULL));
+    //Сгенерировать поле 
+    //int**, где 0 - пустая клетка, -1 бомба, а цифры - количество бомб вокруг 
+    /*
+    ######
+    #112*#
+    #1*21#
+    #1221#
+    #01*1#
+    ######
+
+    */
+
+    int** arr;
+    arr = mas();
+    bool** matr;
+    matr = mas1();
+    print(arr, matr);
+    game(matr, arr);
+
+    
+    for (int i = 0; i < N; i++) {
+        delete[] arr[i];
+        delete[] matr[i];
+    }
+    delete[] arr;
+    delete[] matr;
+
+    return 0;
+    
+}
