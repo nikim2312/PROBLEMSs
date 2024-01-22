@@ -1,0 +1,60 @@
+#include<algorithm>
+#include <iostream>
+#include<string>
+using namespace std;
+//string Perev(int M = 0, string N = "")
+//{
+//    if (M == 0)
+//        cin >> M;
+//    
+//    if (M == 1)
+//    {
+//        N = to_string(1) + N;
+//        return N;
+//    }
+//    N = to_string(M % 2) + N;
+//    return Perev(M / 2, N);
+//}
+int Sum(int a)
+{
+    if (a == 0)
+        return 0;
+
+    return a % 10 + Sum(a / 10);
+}
+int Count(int k, int s, int first = 0, int counter = 0)
+{
+    
+    if (first == 0)
+    {
+        int M = pow(10, (k - 1));
+        first = M;
+    }
+    if (first == pow(10, k))
+    {
+        cout << counter;
+        return 0;
+    }
+    if (Sum(first) == s)
+        counter++;
+    
+    return Count(k, s, first + 1, counter);
+    
+}
+int main()
+{
+   // cout << Perev();
+    //cout << Sum(433);
+    Count(3, 27);
+}
+
+//2. Пользователь вводит число, перевести его в двоичную систему счисления (без циклов, массивов, строк)
+//3. Даны натуральные числа k и s. Определите, сколько существует k-значных натуральных чисел, сумма цифр которых равна s. Запись натурального числа не может начинаться с цифры 0. 
+//3 трехзначных
+//15 сумма цифр
+//69 количество
+
+/* cout << n % 10 / 1 << endl;
+     cout << n % 100 / 10 << endl;
+     cout << n % 1000 / 100  << endl;
+     cout << n % 10000 / 1000 << endl;*/
