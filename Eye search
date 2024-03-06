@@ -1,0 +1,298 @@
+#include<fstream>
+#include <iostream>
+#include<string>
+#include<cmath>
+#include<vector>
+
+using namespace std;
+#pragma pack(push, 1) // Отключаем выравнивание памяти для структур
+
+// Заголовок BMP-файла
+struct BMPHeader {
+    uint16_t signature;
+    uint32_t fileSize;
+    uint16_t reserved1;
+    uint16_t reserved2;
+    uint32_t dataOffset;
+    uint32_t headerSize;
+    int32_t width;
+    int32_t height;
+    uint16_t planes;
+    uint16_t bitsPerPixel;
+    uint32_t compression;
+    uint32_t imageSize;
+    int32_t xPixelsPerMeter;
+    int32_t yPixelsPerMeter;
+    uint32_t colorsUsed;
+    uint32_t colorsImportant;
+};
+const int R = 37;
+#pragma pack(pop) // Восстанавливаем выравнивание по умолчанию
+int brigghtness(int r, int g, int b)
+{
+    return r * 0.299 + g * 0.587 + b * 0.114;
+}
+
+uint8_t* func_pix(uint8_t* mas_pix, int size)
+{
+
+
+
+    for (int i = 84; i < size - 84; i += 3)
+    {
+        int a = brigghtness(mas_pix[i], mas_pix[i + 1], mas_pix[i + 2]);
+
+
+        mas_pix[i] = a;
+        mas_pix[i + 1] = a;
+        mas_pix[i + 2] = a;
+
+    }
+    return mas_pix;
+}
+uint8_t* regions_colors(uint8_t* mas_pix, int size)
+{
+    for (int i = 84; i < size - 84; i += 3)
+    {
+        int a = brigghtness(mas_pix[i], mas_pix[i + 1], mas_pix[i + 2]);
+
+
+        mas_pix[i] = a;
+        mas_pix[i + 1] = a;
+        mas_pix[i + 2] = a;
+    }
+    for (int i = 84; i < size - 84; i += 3)
+    {
+        if (mas_pix[i] > 210)
+        {
+            mas_pix[i] = 100;
+            mas_pix[i + 1] = 100;
+            mas_pix[i + 2] = 100;
+        }
+        else if (mas_pix[i] < 20)
+        {
+            mas_pix[i] = 200;
+            mas_pix[i + 1] = 200;
+            mas_pix[i + 2] = 200;
+        }
+    }
+    return mas_pix;
+}
+
+struct Point {
+    int x;
+    int y;
+
+    Point(int x, int y) {
+        this->x = x;
+        this->y = y;
+    }
+
+    Point(){}
+};
+
+Point coordinates(int x, int y)
+{
+    Point newPoint;
+    newPoint.x = x + R / sqrt(2);
+    newPoint.y = y + R / sqrt(2);
+    return newPoint;
+}
+int pixel_coor(int x, int y, int width, int height)
+{
+
+    return ((width * 3 + 1) * (height - y) - 1 + 84) + (x * 3 + 1);
+}
+
+
+int main()
+{
+    /*  vector<int> vec;
+
+      vec.push_back(5);
+      vec.push_back(-5);
+      vec.push_back(2);
+
+      for (int i = 0; i < vec.size(); i++)
+          cout << vec[i] << " ";*/
+
+    ifstream photo("C:/Users/user/source/repos/les15/socks_close2_hidden.bmp", ios::binary);
+    if (!photo.is_open())
+    {
+        cout << "Error of file oppening";
+        return 1;
+    }
+    BMPHeader header;
+    photo.read((char*)&header, sizeof(BMPHeader));
+
+    uint8_t* pix;
+    pix = new uint8_t[header.fileSize - header.dataOffset];
+    photo.read((char*)pix, header.fileSize - header.dataOffset);
+
+    /* string sipher;
+     cin >> sipher;
+     string tmp = ""; */
+    int size = header.fileSize - header.dataOffset;
+    /* for (int i = 3006 - 84 + 3 ; i <= 4509 - 84 * 2; i += 3)
+     {
+         pix[i] = 200;
+     }*/
+
+     /*int b = 84;
+     for (int i = 0;  i < sipher.length(); i++)
+     {
+         tmp = "";
+         int a = static_cast<int>(sipher[i]);
+         while (a > 0)
+         {
+             tmp += to_string(a % 2);
+
+             a /= 2;
+
+         }
+         reverse(tmp.begin(), tmp.end());
+         for (int i = 0; i < tmp.length(); i++)
+         {
+             pix[b] += tmp[i] - '0';
+             b += 3;
+         }
+
+     }*/
+
+
+    int dot = (size / 2) - 50;
+    pix[dot] = 250;
+    int counter = 0;
+    int schet = 0;
+    int y, x = 0;
+
+    y = dot / 3 / 473;
+
+
+    x = (dot - 84) / 3 % 473;
+
+
+    int chec = size / 4;
+    int check = ((123 * 473) + 208) * 3;
+    pix[chec] = 250;
+    
+    vector <Point> points_2;
+    vector <int> vec;
+    vector <Point> points;
+    Point nav;
+    vector <double> final;
+    Point point;
+    nav = coordinates(428, 247);
+    int dot1 = ((473 * 3) * 220) + 454 * 3;
+    dot1 += 306;
+    pix[dot1] = 250;
+    for (double i = 46; i <= 90; i += 0.5)
+    {
+        int a = R * sin(i);
+        int x1 = 454 - a;
+        int b = R * cos(i);
+        int y1 = 273 - b;
+        int dot_2 = pixel_coor(x1, y1, header.width, header.height);
+
+        int s = R / 4 * 3 * sin(i);
+        int x_average = 454 - s;
+        int r = R / 4 * 3 * cos(i);
+        int y_average = 273 - r;
+        pixel_coor(x_average, y_average, header.width, header.height);
+        vec.push_back(pix[pixel_coor(x_average, y_average, header.width, header.height)] - pix[dot_2]);
+
+
+    }
+    func_pix(pix, size);
+
+    // начальные точки
+    double sum = 0;
+    for (int x = 100; x < 400; x++)
+    {
+        for (int y = 100; y < 400; y++)
+        {
+            vec.clear();
+            sum = 0;
+            points.clear();
+            Point circle;
+            circle = coordinates(x, y);
+            pixel_coor(circle.x, circle.y, header.width, header.height);
+            for (double i = 46; i <= 90; i += 0.5)
+            {
+                int a = R * sin(i);
+                
+                point.x = circle.x - a;
+                int b = R * cos(i);
+                point.y = circle.y - b;
+
+                points.push_back(point);
+                int dot_2 = pixel_coor(point.x, point.y, header.width, header.height);
+                int s = R / 4 * 3 * sin(i);
+                int x_average = circle.x - s;
+                int r = R / 4 * 3 * cos(i);
+                int y_average = circle.y - r;
+                //pixel_coor(x_average, y_average, header.width, header.height);
+                vec.push_back(pix[pixel_coor(x_average, y_average, header.width, header.height)] - pix[dot_2]);
+                for (int i = 0; i < vec.size(); i++)
+                {
+                    sum += vec[i];
+                }
+                
+
+            }
+            sum /= vec.size();
+            final.push_back(sum);
+            points_2.push_back(Point(x,y));
+            /*if (sum > 15)
+            {
+                for (int i = 0; i < points.size(); i++)
+                {
+                    Point current_point = points[i];
+                    int fin = pixel_coor(current_point.x, current_point.y, header.width, header.height);
+                    pix[fin] = 250;
+                }
+            }*/
+        }
+    }
+    double max = 0;
+    Point maxPoint = points_2[0];
+    for (int i = 0; i < points_2.size(); i++)
+    {
+        if (abs(final[i]) > abs(max))
+        {
+            max = final[i];
+            maxPoint = points_2[i];
+        }
+
+    }
+    cout << max;
+    int first_dot = pixel_coor(maxPoint.x, maxPoint.y, header.width, header.height);
+    pix[first_dot] = 250;
+    Point centr = coordinates(maxPoint.x, maxPoint.y);
+    for (double i = 46; i < 90; i += 0.5)
+    {
+        int a = R * sin(i);
+        int x1 = centr.x - a;
+        int b = R * cos(i);
+        int y1 = centr.y - b;
+        int dot_2 = pixel_coor(x1, y1, header.width, header.height);
+        pix[dot_2] = 250;
+    }
+
+
+
+
+    photo.close();
+
+
+    ofstream photoresult("C:/Users/user/source/repos/les15/result3.bmp", ios::binary);
+    photoresult.write((char*)&header, sizeof(BMPHeader));
+    photoresult.write((char*)pix, header.fileSize - header.dataOffset);
+    photoresult.close();
+
+
+
+
+
+    delete[] pix;
+}
