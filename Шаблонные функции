@@ -1,0 +1,151 @@
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+//int sum(int a, int b) {
+//    return a + b;
+//}
+//
+//float sum(float a, float b) {
+//    return a + b;
+//}
+//
+//double sum(double a, double b) {
+//    return a + b;
+//}
+//
+//
+//string sum(string a, string b) {
+//    return a + b;
+//}
+
+//*int sum_int()
+//{
+//    int* mas;
+//    mas = new int[a];
+//    for (int i = 0; i < a; i++)
+//    {
+//        mas[i] = rand() % 10 + 1;
+//    }
+//    for (int i = 0; i < a; i++)
+//    {
+//        cout << mas[i] << " ";
+//    }
+//    cout << endl;
+//
+//    int* mas1;
+//    mas1 = new int[a];
+//    for (int i = 0; i < a; i++)
+//    {
+//        mas1[i] = rand() % 10 + 1;
+//
+//    }
+//    for (int i = 0; i < a; i++)
+//    {
+//        cout << mas1[i] << " ";
+//    }
+//    cout << endl;
+//    int* fin;
+//    int y = 12;
+//    fin = sum2(mas, mas1, a);
+//    for (int i = 0; i < a; i++)
+//    {
+//        cout << fin[i] << " ";
+//    }
+//    
+//}
+
+
+template <typename T, typename A> //шаблонная функция
+T sum(T a, A b) {
+    return a + b;
+}
+template <typename T, typename A>
+T sum2(T a, T b, int size)
+{
+    T mas;
+    mas = new A[size];
+    for (int i = 0; i < size; i++)
+    {
+        mas[i] = a[i] + b[i];
+
+    }
+    return mas;
+
+}
+template <typename T>
+T sum2(T a, T b, int size)
+{
+    T mas = "";
+    for (int i = 0; i < size; i++)
+    {
+        mas += a[i];
+    }
+    for (int i = 0; i < size; i++)
+    {
+        mas[i] += b[i];
+    }
+    return mas;
+
+}
+//template <typename T>
+//T* sum2(T a, T b, int size)
+//{
+//    T* mas;
+//    mas = new T[size];
+//    for (int i = 0; i < size; i++)
+//    {
+//        mas[i] = a[i] + b[i];
+//
+//    }
+//    return mas;
+//
+//}
+
+int main()
+{
+    srand(time(NULL));
+    setlocale(LC_ALL, "ru");
+    //cout << sum(5, 1) << endl;
+    //cout << sum(5.0, 1.1) << endl;
+    //cout << sum(5.0f, 1.0f) << endl;
+    //cout << sum(to_string(5), 5) << endl;
+    int a = 10;
+  // sum(sum, sum);
+
+    //Шаблонная функция, которая принимает два одинаковых по длине массива произвольного типа и возвращает массив того же типа, содержащий суммы
+    //элементов первых двух
+    
+    /*string *arr;
+    arr = new string[a];
+    for (int i = 0; i < a; i++)
+    {
+        arr[i] = "hello ";
+    }
+    string* arr1;
+    arr1 = new string[a];
+    for (int i = 0; i < a; i++)
+    {
+        arr1[i] = " world ";
+    }
+    string* final;
+    final = sum2<string*, string>(arr, arr1, a);
+    for (int i = 0; i < a; i++)
+    {
+        cout << final[i];
+
+    }
+    string sub = "";*/
+
+
+    string test = "Hello, world!";
+    string test2 ="Today is Wi7.";
+    
+    string result = sum2<string>(test, test2, (int)test.size());
+
+    cout << result << endl;
+    cout << (char)('H' + 'T');
+}
+
