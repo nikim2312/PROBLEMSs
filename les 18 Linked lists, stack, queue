@@ -1,0 +1,433 @@
+#include <iostream>
+using namespace std;
+class Element {
+public:
+    int data;
+    Element* next;
+};
+
+class Queue {
+public:
+
+    Element* head = nullptr;
+    //Element* tail = nullptr;
+    
+    void Push(int a)
+    {
+        Element* new_el = new Element;
+        new_el->data = a;
+        new_el->next = nullptr;
+
+        if (head == nullptr)
+        {
+            head = new_el;
+        }
+        else
+        {
+            Element* tail;
+            tail = head;
+            while (tail->next != nullptr)
+            {
+                tail = tail->next;
+            }
+
+            tail->next = new_el;
+            tail = new_el;
+        }
+        
+    }
+    void Print()
+    {
+        Element* count;
+        count = head;
+        while (count != nullptr)
+        {
+            cout << count->data << endl;
+            count = count->next;
+        }
+        
+    }
+    int Pop()
+    {
+        int first = head->data;
+        Element* tmp = head;
+        head = head->next;
+        delete tmp;
+        return first;
+    }
+};
+class Stack
+{
+public:
+
+    Element* head = nullptr;
+    
+
+    void Push(int a)
+    {
+        Element* new_el = new Element;
+        new_el->data = a;
+        new_el->next = nullptr;
+        if (head == nullptr)
+        {
+            head = new_el;
+        }
+        else
+        {
+            Element* tail;
+            tail = head;
+            while (tail->next != nullptr)
+            {
+                tail = tail->next;
+            }
+
+            tail->next = new_el;
+            tail = new_el;
+        }
+
+    }
+    void Print()
+    {
+        if (head == nullptr)
+        {
+            return;
+        }
+        Element* count;
+        count = head;
+        while (count->next != nullptr)
+        {
+            cout << count->data << " ";
+            count = count->next;
+        }
+        cout << count->data;
+
+        cout << endl;
+    }
+    int Pop()
+    {
+        
+        if (head == nullptr)
+        {
+            return 0;
+        }
+        else if (head->next == nullptr)
+        {
+            int a = head->data;
+            delete[] head;
+            head = nullptr;
+            return a;
+
+        }
+        else 
+        {
+            Element* tmp = head;
+            while (tmp->next->next != nullptr)
+            {
+                tmp = tmp->next;
+            }
+            int last = tmp->next->data;
+            delete[] tmp->next;
+            tmp->next = nullptr;
+            return last;
+        }
+        
+    }
+    Element* Find(int num)
+    {
+        Element* ite;
+        ite = head;
+        bool stop = false;
+        while (ite->next != nullptr)
+        {
+            if (ite->data != num)
+            {
+                ite = ite->next;
+            }
+            else if (ite->data == num)
+            {
+                stop = true;
+                break;
+            }
+        }
+        if (ite->data != num)
+        {
+            ite = ite->next;
+        }
+        else if (ite->data == num)
+        {
+            stop = true;
+        }
+        if (stop == false)
+        {
+            ite = nullptr;
+            return ite;
+        }
+        return ite;
+        
+    }
+    void Back()
+    {
+        Element* current = head;
+        Element* next = nullptr;
+        Element* prev = nullptr;
+        while (current->next != nullptr)
+        {
+            next = current->next;
+            current->next = prev;
+            prev = current;
+            current = next;
+        }
+        current->next = prev;
+        head = current;
+    }
+    void sort(bool order)
+    {
+        if (order)
+        {
+            Element* count = head;
+            int counter = 1;
+            while (count->next != nullptr)
+            {
+                count = count->next;
+                counter++;
+            }
+            for (int i = 0; i < counter; i++)
+            {
+                Element* sorting = head->next;
+                Element* help = head;
+                if (head->data > head->next->data)
+                {
+                    head->next = head->next->next;
+                    sorting->next = head;
+                    head = sorting;
+                    help = head;
+                    sorting = head->next;
+                }
+
+                while (sorting->next->next != nullptr)
+                {
+                    if (sorting->data > sorting->next->data)
+                    {
+                        Element* temp = sorting->next;
+                        sorting->next = sorting->next->next;
+                        temp->next = sorting;
+                        help->next = temp;
+                        help = temp;
+                        temp = sorting->next;
+                    }
+                    else
+                    {
+                        help = sorting;
+                        sorting = sorting->next;
+                    }
+
+                }
+                if (sorting->data > sorting->next->data)
+                {
+                    sorting->next->next = sorting;
+                    sorting->next = nullptr;
+                }
+            }
+        }
+        else if (!order)
+        {
+            Element* count = head;
+            int counter = 1;
+            while (count->next != nullptr)
+            {
+                count = count->next;
+                counter++;
+            }
+            for (int i = 0; i < counter; i++)
+            {
+                Element* sorting = head->next;
+                Element* help = head;
+                if (head->data < head->next->data)
+                {
+                    head->next = head->next->next;
+                    sorting->next = head;
+                    head = sorting;
+                    help = head;
+                    sorting = head->next;
+                }
+
+                while (sorting->next->next != nullptr)
+                {
+                    if (sorting->data < sorting->next->data)
+                    {
+                        Element* temp = sorting->next;
+                        sorting->next = sorting->next->next;
+                        temp->next = sorting;
+                        help->next = temp;
+                        help = temp;
+                        temp = sorting->next;
+                    }
+                    else
+                    {
+                        help = sorting;
+                        sorting = sorting->next;
+                    }
+
+                }
+                if (sorting->data < sorting->next->data)
+                {
+                    sorting->next->next = sorting;
+                    sorting->next = nullptr;
+                }
+            }
+        }
+    }
+    int Count()
+    {
+        Element* count = head;
+        int counter = 1;
+        while (count->next != nullptr)
+        {
+            count = count->next;
+            counter++;
+        }
+        return counter;
+    }
+    
+    int* ToArray() {
+        int* arr;
+        int size = Count();
+        arr = new int[size];
+        Element* ite;
+        ite = head;
+        for (int i = 0; i < size; i++)
+        {
+            arr[i] = ite->data;
+            ite = ite->next;
+        }
+        return arr;
+    }
+};
+
+bool Issort(int* mas, int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        if (mas[i] < mas[i + 1])
+        {
+            return false;
+        }
+    }
+    return true;
+}
+void test(int f, int r)
+{
+    
+    for (int j = 0; j < r; j++)
+    {
+        Stack stack;
+        for (int i = 0; i < f; i++)
+        {
+            stack.Push(rand() % 90 + 10);
+        }
+        stack.Print();
+        stack.sort(false);
+        stack.Print();
+
+        if (!Issort(stack.ToArray(), stack.Count()))
+            cout << "no" << endl;
+    }
+    
+    
+    
+}
+
+//void Push(int a); добавляет элемент в конец очереди
+//void Print(); выводит очередь в естественном порядке
+//int Pop(); удаляет элемент из начала очереди и возвращает его значение
+
+//...
+
+//1. Написать функцию Find, принимающую значение числа, которое она ищет и возвращает ссылку на Element из очереди или nullptr
+//2. Написать PrintBack()
+//3. Метод, разворачивающий цепь
+//4. Сортировка. Метод принимает параметр по-умолчанию order = true (что означает по возрастанию)
+
+int main()
+{
+    srand(time(NULL));
+    //Queue queue;
+
+    //queue.Push(5);
+    //queue.Push(9);
+    //queue.Push(-3);
+    //queue.Push(2);
+
+    //queue.Print(); //5 9 -3 2
+
+
+    //cout << "last el:" << queue.Pop() << endl; //5
+    //cout << "last el:" << queue.Pop() << endl; //9
+
+    //queue.Print(); //-3 2
+
+    //cout << "last el:" << queue.Pop() << endl; //-3
+    //cout << "last el:" << queue.Pop() << endl; //2
+    /*Stack stack;
+    stack.Push(1);
+    stack.Push(2);
+    stack.Push(6);
+    stack.Push(2);
+    stack.Push(7);
+    stack.Push(3);
+    stack.Push(17);
+    int size = stack.Count();*/
+
+   
+    /*stack.Push(6);
+    stack.Push(5);
+    stack.Push(5);
+    stack.Push(4);
+    stack.Push(3);
+    stack.Push(2);
+    stack.Push(1);
+    stack.Print();*/
+   /* stack.sort(false);
+    cout << endl;
+    stack.Print();
+    if (Issort(stack.ToArray(), stack.Count()))
+        cout << "YES";*/
+    test(500, 10000);
+    /*stack.Back();
+    cout << endl;
+    stack.Print();*/
+
+    /*Element* found = stack.Find(3);
+
+    if(found)
+        cout << endl << found->data << endl;
+    else cout << "Not found" << endl;
+
+    found = stack.Find(1);
+
+    if (found)
+        cout << endl << found->data << endl;
+    else cout <<  "Not found" << endl;
+
+    found = stack.Find(17);
+
+    if (found)
+        cout << endl << found->data << endl;
+    else cout << "Not found" << endl;
+
+    found = stack.Find(115);
+
+    if (found)
+        cout << endl << found->data << endl;
+    else cout << "Not found" << endl;*/
+
+    /*cout << endl << "last el:" << stack.Pop() << endl;
+    stack.Print();
+    cout << endl << "last el:" << stack.Pop() << endl;
+    cout << endl << "last el:" << stack.Pop() << endl;
+    cout << endl << "last el:" << stack.Pop() << endl;
+    cout << endl << "last el:" << stack.Pop() << endl;
+    stack.Print();*/
+    //cout << queue.Pop(); //0
+}
+
