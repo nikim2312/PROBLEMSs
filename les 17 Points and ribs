@@ -1,0 +1,699 @@
+
+#include <iostream>
+#include<string>
+#include<iomanip>
+#include<fstream>
+using namespace std;
+
+////int, float, double, string, char, bool 
+//
+//class Student {
+//public:
+//  string FIO;  //переменные класса или поля класса 
+//  int age;
+//  bool gender;
+//
+//  void Print() { //функции, помещенные в класс, называются методы.
+//    cout << FIO << "  " << age << endl;
+//  }
+//};
+//
+//
+//void Print(Student st) {
+//  cout << st.FIO << "  " << st.age << endl;
+//}
+//
+////класс - пользовательский тип данных 
+//
+//
+//int main()
+//{
+//   //ООП - объектно-ориентированное программирование
+//
+//  string* FIO;
+//  int* Age;
+//  bool* Gender;
+//
+//  Student students[100];
+//
+//
+//  Student Alex;
+//  Alex.FIO = "Alex";
+//  Alex.Print();
+//
+//  Print(Alex);
+//
+//  Student Mike;
+//  Mike.FIO = "Mike";
+//  Mike.Print();
+//}
+//
+#define M 10
+#define TRE 3
+class Point
+{
+public:
+    float x;
+    float y;
+
+    void math()
+    {
+        float res = x - y;
+        cout << abs(res) << endl;
+    }
+    void dotqw()
+    {
+        cout << x << " " << y << endl;
+    }
+
+    Point() {}
+
+    string ToString() {
+        string result = "";
+
+        result += to_string(x);
+        result += "<->";
+        result += to_string(y);
+
+
+        return result;
+    }
+
+};
+
+class Rebro
+{
+public:
+    Point* p1;
+    Point* p2;
+
+    void out(Point* a, Point* b)
+    {
+        cout << p1->x << " " << p1->y;
+        cout << endl << p2->x << " " << p2->y << endl;
+    }
+};
+
+class Polyangel
+{
+public:
+
+    int qol_po = 0;
+    int qol_rib = 0;
+
+    Point* points;
+    Rebro* ribs;
+
+    //void F() {
+
+    //  
+
+
+    //  Rebro newRebro;
+    //  newRebro.p1 = &points[3];
+    //  newRebro.p2 = &points[7];
+
+    ////  newRebro.p1->x = 10;
+    ////  points[3].x = 10;
+
+    //  ribs[0] = newRebro;
+
+    //}
+    int* Find_num(int size, Rebro a, int*& mas)
+    {
+        bool first = false;
+        bool sec = false;
+        
+       
+        if (points == nullptr)
+        {
+            mas[0] = -1;
+            mas[1] = -1;
+
+            return mas;
+        }
+               
+       
+        for (int i = 0; i < size; i++)
+        {
+            if (a.p1->x == points[i].x && a.p1->y == points[i].y)
+            {
+                first = true;
+                mas[0] = i;
+            }
+            else if (a.p2->x == points[i].x && a.p2->y == points[i].y)
+            {
+                sec = true;
+                mas[1] = i;
+            }
+            
+        }
+        if (first == true && sec == true)
+        {
+            return mas;
+        }
+        else
+        {
+            mas[0] = -1;
+            mas[1] = -1;
+        }
+        
+        return mas;
+    }
+    void AddRib(int first, int sec) {
+
+        Rebro new_rib;
+        new_rib.p1->x = 10;
+        new_rib.p1 = &points[first];
+        new_rib.p2 = &points[sec];
+        
+        if (qol_rib == 0)
+        {
+            ribs = new Rebro[1];
+            ribs[0] = new_rib;
+        }
+        else
+        {
+            Rebro* tmp;
+            tmp = new Rebro[qol_rib + 1];
+            for (int i = 0; i < qol_rib; i++)
+            {
+                tmp[i] = ribs[i];
+
+            }
+            tmp[qol_rib] = new_rib;
+            delete[] ribs;
+
+            ribs = tmp;
+
+
+            /*ribs[qol_rib - 1].p1 = &points[qol_rib - 1];
+            ribs[qol_rib - 1].p2 = &points[0];
+            ribs[qol_rib] = test;*/
+        }
+
+
+        qol_rib++;
+    }
+   
+    //(2,5)   (1, 4) ....
+    //(2,5) <-> (1,4)
+    //(1,4) <-> (78,5)
+    void print()
+    {
+        for (int i = 0; i < qol_po; i++)
+        {
+            cout << points[i].x << " " << points[i].y << endl;
+
+        }
+        cout << endl << endl;
+        for (int i = 0; i < qol_rib; i++)
+        {
+
+            cout << ribs[i].p1->x << " " << ribs[i].p1->y << "<->" << ribs[i].p2->x << " " << ribs[i].p2->y << endl;
+        }
+    }
+    bool Intersect(Point p, Rebro r) {
+
+        float k = (r.p1->y - r.p2->y) / (r.p1->x - r.p2->x);
+        float b = r.p1->y - k * r.p1->x;
+        float y_on_line = k * p.x + b;
+        if ((p.y < y_on_line && r.p1->y > r.p2->y) || (p.y > y_on_line && r.p1->y < r.p2->y))
+            return true;
+        return false;
+
+    }
+    
+    bool IsInside(Point test_1)
+
+    {
+
+        int sech = 0;
+        for (int i = 0; i < qol_rib; i++)
+        {
+            bool res = Intersect(test_1, ribs[i]);
+            if (res)
+                sech++;
+
+
+        }
+        if (sech % 2 != 0)
+            return true;
+        return false;
+    }
+    void AddPoint(float x, float y)
+    {
+        Point new_po;
+        new_po.x = x;
+        new_po.y = y;
+
+        if (qol_po  == 0)
+        {
+            points = new Point[1];
+            points[0] = new_po;
+        }
+        else
+        {
+            Point* tmp;
+            tmp = new Point[qol_po + 1];
+            for (int i = 0; i < qol_po; i++)
+            {
+                tmp[i] = points[i];
+
+            }
+            tmp[qol_po] = new_po;
+            delete[] points;
+
+            points = tmp;
+
+
+            /*ribs[qol_rib - 1].p1 = &points[qol_rib - 1];
+            ribs[qol_rib - 1].p2 = &points[0];
+            ribs[qol_rib] = test;*/
+        }
+        qol_po++;
+    }
+    void SaveToFile(string a)
+    {
+        //for (int i = 0; i < qol_po; i++)
+            //cout << points[i].ToString() << endl;
+        ofstream poly("C:/Users/user/source/repos/les17/" + a);
+        if (!poly.is_open())
+        {
+            cout << "Error of opening file for writing!";
+            return;
+        }
+        poly << qol_po << endl;
+        for (int i = 0; i < qol_po; i++)
+            poly << points[i].ToString() << endl;
+        poly << qol_rib << endl;
+        for (int i = 0; i < qol_rib; i++)
+        {
+            if (i == qol_rib - 1)
+            {
+                poly << ribs[i].p1->x << "_" << ribs[i].p1->y << "<->" << ribs[i].p2->x << "_" << ribs[i].p2->y;
+            }
+            else
+            {
+                poly << ribs[i].p1->x << "_" << ribs[i].p1->y << "<->" << ribs[i].p2->x << "_" << ribs[i].p2->y << endl;
+            }
+            
+        }
+        poly.close();
+    }
+   
+};
+
+Point func(string a)
+{
+    Point newPoint;
+    string noun = "<->";
+    size_t pos = a.find(noun);
+
+
+    if (pos != string::npos && pos > 0 && pos < a.length() - 1)
+    {
+        string x_str = a.substr(0, pos);
+        string y_str = a.substr(pos + 3);
+
+
+        newPoint.x = stof(x_str);
+        newPoint.y = stof(y_str);
+    }
+    else
+    {
+        cout << "Invalid input format." << endl;
+    }
+
+    return newPoint;
+}
+Rebro func_rib(string a)
+{
+    Point one;
+    Point two;
+    Rebro newrib;
+    string noun = "_";
+    size_t pos = a.find(noun);
+    string noun1 = "<->";
+    size_t pos1 = a.find(noun1);
+    string y_str = "";
+    if (pos != string::npos && pos > 0 && pos < a.length() - 1)
+    {
+        if (pos1 != string::npos && pos1 > 0 && pos1 < a.length() - 1)
+        {
+            string x_str = a.substr(0, pos);
+            if (pos1 == 3)
+            {
+                y_str = a.substr(pos + 1, 1);
+            }
+            if (pos1 == 4)
+            {
+                y_str = a.substr(pos + 1, 2);
+            }
+            string tmp = a.substr(pos1 + 3);
+
+
+
+            one.x = stof(x_str);
+            one.y = stof(y_str);
+            newrib.p1 = &one;
+
+            size_t pos2 = tmp.find(noun);
+            if (pos2 != string::npos && pos2 > 0 && pos2 < a.length() - 1)
+            {
+                string x1 = tmp.substr(0, pos2);
+                string y1 = tmp.substr(pos2 + 1);
+
+                two.x = stof(x1);
+                two.y = stof(y1);
+                newrib.p2 = &two;
+
+            }
+
+        }
+
+    }
+
+    else
+    {
+        cout << "Invalid input format." << endl;
+    }
+
+    return newrib;
+}
+
+Polyangel LoadFromFile(string ty)
+{
+    ifstream data("C:/Users/user/source/repos/les17/" + ty);
+    if (!data.is_open()) {
+        cout << "Error of opening file for reading!";
+        return Polyangel();
+    }
+    string filename = "C:/Users/user/source/repos/les17/" + ty;
+    string b = "";
+    string b1 = "";
+    int num_rib;
+    int num_po;
+    getline(data, b);
+    num_po = stoi(b);
+
+    string* arr = new string[num_po];
+    for (int i = 0; i < num_po; i++)
+    {
+        getline(data, arr[i]);
+    }
+
+    getline(data, b1);
+    num_rib = stoi(b1);
+
+    string* arr1 = new string[num_rib];
+    for (int i = 0; i < num_rib; i++)
+    {
+        getline(data, arr1[i]);
+
+    }
+    data.close();
+
+    Polyangel output;
+
+
+    for (int i = 0; i < num_po; i++)
+    {
+        Point a = func(arr[i]);
+        output.AddPoint(a.x, a.y);
+    }
+    int* num;
+    num = new int[2];
+    for (int i = 0; i < num_rib; i++)
+    {
+        Rebro a = func_rib(arr1[i]);
+        num = output.Find_num(num_rib, a, num);
+        if (num[0] == -1)
+            continue;
+        else
+        {
+            bool stop = false;
+            for (int j = 0; j < output.qol_rib; j++)
+            {
+                if (a.p1->x == output.ribs[j].p1->x && a.p1->y == output.ribs[j].p1->y &&
+                    a.p2->x == output.ribs[j].p2->x && a.p2->y == output.ribs[j].p2->y)
+                {
+                    stop = true;
+
+                }
+            }
+            if (stop == false)
+                output.AddRib(num[0], num[1]);
+        }
+
+    }
+    delete[] arr;
+    delete[] arr1;
+    delete[] num;
+    return output;
+}
+
+Polyangel triangle(int a, int b, int c, int d, int e, int f)
+{
+    Polyangel test;
+
+   /* Point p[3];
+    p[0].x = 1;
+    p[0].y = 1;
+    p[1].x = 5;
+    p[1].y = 10;
+    p[2].x = 9;
+    p[2].y = 1;
+    test.AddPoint(p[0]);
+    test.AddPoint(p[1]);
+    test.AddPoint(p[2]);*/
+
+    test.AddPoint(a, b);
+    test.AddPoint(c, d);
+    test.AddPoint(e, f);
+
+    //test.points = new Point[TRE];
+
+
+   /* test.points[0].x = 1;
+    test.points[0].y = 1;
+    test.points[1].x = 5;
+    test.points[1].y = 10;
+    test.points[2].x = 9;
+    test.points[2].y = 1;
+    for (int i = 0; i < TRE; i++)
+    {
+
+    }*/
+
+    test.AddRib(0, 1);
+    test.AddRib(1, 2);
+    test.AddRib(2, 0);
+
+    return test;
+}
+//Rebro function(Polyangel a, int size)
+//{
+//  Rebro first;
+//  first.p1
+//}
+//void Bench(int num_tests) {
+//    for (int i = 0; i < num_tests; ++i) 
+//    {
+//      /*  Point testPoint;
+//        testPoint.x = 99;
+//        testPoint.y = 99;*/
+//        int a = rand() % 40 + 11;
+//        int b = rand() % 40 + 11;
+//        int c = rand() % 40 + 11;
+//        int d = rand() % 40 + 11;
+//        int e = rand() % 40 + 11;
+//        int f = rand() % 40 + 11;
+//        Polyangel testPoly = triangle(a, b, c, d, e, f);
+//        (testPoly.IsInside(testPoint) ? "INSIDE!" : "OUTSIDE!");
+//        cout << "Test " << i + 1 << ":" << endl;
+//        testPoly.print(); 
+//        cout << endl;
+//
+//
+//        Point testPoint;
+//        Polyangel testPolyangle = GeneratePolyangleByPoint(testPoint, true);
+//
+//        if (!testPolyangle.IsInside(testPoint))
+//            cout << "Тест №"<< i+1 << " не пройден!" << endl;
+//
+//    }
+//}
+Polyangel GeneratePolyangleByPoint(Point p, bool place) {
+    Polyangel ang;
+    if (place == true)
+    {
+        int x_1 = rand() % 97 + 2;
+        int y_1 = rand() % 97 + 2;
+        ang.AddPoint(p.x - x_1, p.y + y_1);
+        ang.AddPoint((p.x - x_1) + 100, p.y + y_1);
+        ang.AddPoint(p.x - x_1, p.y + y_1 - 100);
+        ang.AddPoint((p.x - x_1) + 100, p.y + y_1 - 100);
+        ang.AddRib(0, 1);
+        ang.AddRib(1, 2);
+        ang.AddRib(2, 3);
+        ang.AddRib(3, 0);
+    }
+    else if (place == false)
+    {
+        
+        ang.AddPoint(p.x - 500, p.y);
+        ang.AddPoint(p.x - 400, p.y);
+        ang.AddPoint(p.x - 500, p.y - 500);
+        ang.AddPoint(p.x - 400, p.y - 500);
+        ang.AddRib(0, 1);
+        ang.AddRib(1, 2);
+        ang.AddRib(2, 3);
+        ang.AddRib(3, 0);
+    }
+    return ang;
+}
+void bench_1(int num_tests)
+{
+    int counter = 0;
+    for (int i = 0; i < num_tests; i++)
+    {
+        
+        int a = rand() % 100 + 1;
+        int b = rand() % 100 + 1;
+        bool run = (a > b) ? true : false;
+        Point testPoint;
+        testPoint.x = rand() % 100 + 1;
+        testPoint.y = rand() % 100 + 1;
+        Polyangel testPolyangle = GeneratePolyangleByPoint(testPoint, run);
+
+        testPolyangle.points[0].x = -27;
+        testPolyangle.points[0].y = 56;
+
+        testPolyangle.points[1].x = 73;
+        testPolyangle.points[1].y = 56;
+
+        testPolyangle.points[2].x = -27;
+        testPolyangle.points[2].y = -44;
+
+        testPolyangle.points[3].x = 73;
+        testPolyangle.points[3].y = -44;
+
+
+        testPoint.x = 71;
+        testPoint.y = 25;
+
+        testPolyangle.print();
+
+        cout << (testPolyangle.IsInside(testPoint) == true ? "внутри" : "снаружи") << endl;
+
+        break;
+
+
+        if (run == true && testPolyangle.IsInside(testPoint))
+        {
+            cout << "Тест №:" << i + 1 << " пройден!" << endl;
+            counter++;
+        }
+        
+        else if (run == false && !testPolyangle.IsInside(testPoint))
+        {
+            cout << "Тест №:" << i + 1 << " пройден!" << endl;
+            counter++;
+        }
+        else
+        {
+            cout << (run == true ? "внутри" : "снаружи") << endl;
+            cout << "Point: " << testPoint.ToString() << endl;
+            testPolyangle.print();
+            cout << endl;
+            cout << "Тест №:" << i + 1 << " не пройден" << endl;
+            break;
+        }
+    }
+    cout << counter;
+}
+
+
+void search(Point* mas)
+{
+    int min_index = 0;
+    float min = mas[0].x + mas[0].y;
+    for (int i = 0; i < M; i++)
+    {
+        if (mas[i].x + mas[i].y < min)
+        {
+            min = mas[i].x + mas[i].y;
+            min_index = i;
+        }
+    }
+    float max = 0.0;
+    int max_index = 0;
+    for (int i = 0; i < M; i++)
+    {
+        if (mas[i].x + mas[i].y > max)
+        {
+            max = mas[i].x + mas[i].y;
+            max_index = i;
+        }
+    }
+    cout << mas[min_index].x << " " << mas[min_index].y << endl;
+    cout << mas[max_index].x << " " << mas[max_index].y;
+}
+int main() {
+    srand(time(NULL));
+    setlocale(LC_ALL, "RU");
+    //Polyangel num1 = triangle();
+    //num1.print();
+
+    /*Point testPoint;
+    testPoint.x = 50;
+    testPoint.y = 7;*/
+
+    //bench_1(50);
+    //Bench(500);
+    //Bench(5000);
+    Point re;
+    re.x = 12;
+    re.y = 13;
+    Point rer;
+    rer.x = 45;
+    rer.y = 46;
+    Rebro test;
+    test.p1 = &re;
+    test.p2 = &rer;
+    
+    cout << test.p1->x << "-" << test.p1->y<< endl;
+    cout << test.p2->x << "-" << test.p2->y << endl;
+
+    //num1.SaveToFile("test.txt");
+
+    /*Polyangel newPoly;
+    newPoly = LoadFromFile("test.txt");
+    newPoly.print();*/
+
+
+    //if (num1.IsInside(testPoint))
+    //    cout << "INSIDE!";
+    //else 
+    //    cout << "OUTSIDE!";
+    
+
+    //cout << (num1.IsInside(testPoint) ? "INSIDE!" : "OUTSIDE!");
+    
+    //тернарный оператор
+
+    //Метод, который принимает точку и проверяет, находится ли она внутри многоугольника
+
+    return 0;
+}
+//true - вокруг.
+//Написать класс Point с полями float x, float y;
+  //Написать метод, который рассчитывает расстояние от текущей точки до пробной.
+  //Написать метод вывода точки на экран в формате (x,y), например (2.5,-5)
+  //Написать фукнцию, которая принимает на вход строку string, а возвращает точку, разбирая строку на компоненты точки. Пример "3.5,4" в объект класса Point
+//Пусть создается массив точек. Написать функцию, которая находит две точки, расположенные  на наибольшем расстоянии друг от друга   10
+
+//1. Создать класс Polyangle (многоугольник). Он должен задаваться массивом точек, массивом ребер.
+//2. Создать объект этого класса - треугольник из трех задаваемых в main точек (для теста)
+//3. Написать метод, который принимает одну точку и проверяет, находится ли она внутри этого многоугольника
