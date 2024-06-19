@@ -1,0 +1,182 @@
+#include <iostream>
+#include<vector>
+#include<string>
+using namespace std;
+const int P = 31;
+template <typename T>
+class Bucket
+{
+
+public:
+
+    vector <T> vec;
+
+
+};
+
+template<typename T>
+class Hashtable
+{
+protected:
+
+    int startBucketCount;
+    int maxBucketSize;
+    int bucketGrowth;
+
+    int currentSize;
+
+    
+public:
+    vector <Bucket<T>> vecs;
+    Hashtable(int num = 10, int maxBucketSize = 10, int bucketGrowth = 10)
+    {
+        startBucketCount = num;
+        this->maxBucketSize = maxBucketSize;
+        this->bucketGrowth = bucketGrowth;
+
+        currentSize = startBucketCount;
+
+        vecs.resize(currentSize);
+    }
+
+    double Hash(string str)
+    {
+        double val = 0;
+
+
+        for (int i = 0; i < str.length(); i++)
+        {
+
+
+            val += stod(to_string(str[i] - '0')) * pow(P, i);
+
+        }
+        int res = int(val) % currentSize;
+        val = res;
+        return val;
+    }
+    int HashFind(int val)
+    {
+        bool stop = true;
+        int res = Hash(to_string(val));
+        for (int i = 0; i < vecs[res].vec.size(); i++)
+        {
+            if (vecs[res].vec[i] == val)
+            {
+                stop = false;
+                return i;
+            }
+
+
+        }
+        return -1;
+
+    }
+
+    virtual string castToString(T data) = 0; //полностью виртуальная функция (она делает класс абстрактным)
+
+    void copy_hash()
+    {
+        vector <Bucket<T>> help = vecs;
+        vecs.clear();
+        vecs.resize(currentSize);
+        for (int i = 0; i < help.size(); i++)
+        {
+            for (int j = 0; j < help[i].vec.size(); j++)
+            {
+                double x;
+                x = Hash(castToString(help[i].vec[j]));
+                vecs[x].vec.push_back(help[i].vec[j]);
+            }
+        }
+    }
+
+    void Add(T data)
+    {
+        double x = Hash(castToString(data));
+        vecs[x].vec.push_back(data);
+        if (vecs[x].vec.size() > maxBucketSize)
+        {
+            currentSize += bucketGrowth;
+            copy_hash();
+        }
+    }
+
+    void Find(int num_to_find)
+    {
+        int x = num_to_find % currentSize;
+        for (int i = 0; i < vecs[x].vec.size(); i++)
+        {
+            if (vecs[x].vec[i] == num_to_find)
+            {
+                cout << endl;
+                cout << "Find1 " << i;
+                break;
+            }
+        }
+    }
+    
+};
+
+template <typename T>
+class HashPrimitiveTable : public Hashtable<T>
+{
+    string castToString(T data) override {
+        return to_string(data);
+    }
+    
+
+};
+
+template <typename T>
+class HashClassTable : public Hashtable<T>
+{
+public:
+    string castToString(T data) override {
+        return data.ToString();
+    }
+
+   
+};
+
+class Human {
+public:
+    string name;
+    int age;
+
+    Human() {
+
+    }
+
+    Human(string name, int age) {
+        this->name = name;
+        this->age = age;
+    }
+
+    string ToString() {
+        return name + " " + to_string(age);
+    }
+};
+
+
+
+int main()
+{
+
+    srand(time(NULL));
+    setlocale(LC_ALL, "Ru");
+    HashPrimitiveTable<int> od;
+
+    od.Add(15);
+    od.Add(7);
+    od.Add(-5);
+
+    HashClassTable<Human> ht;
+
+    ht.Add(Human("Alex", 20));
+
+
+
+    return 0;
+
+}
